@@ -1,4 +1,4 @@
-FROM golang:1.20
+FROM golang:1.23
 
 # Ignore APT warnings about not having a TTY
 ENV DEBIAN_FRONTEND noninteractive
@@ -21,7 +21,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ARG IMAGEMAGICK_PROJECT=ImageMagick
-ARG IMAGEMAGICK_VERSION=7.0.8-41
+ARG IMAGEMAGICK_VERSION=7.1.1-36
 ENV IMAGEMAGICK_VERSION=$IMAGEMAGICK_VERSION
 
 RUN cd && \
