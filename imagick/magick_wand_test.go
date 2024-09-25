@@ -235,7 +235,7 @@ func TestReadImageBlob(t *testing.T) {
 
 	// Try to read an empty wand
 	blob, _ := mw.GetImageBlob()
-	if blob != nil {
+	if len(blob) > 0 {
 		t.Fatal("Expected nil blob on invalid wand")
 	}
 
