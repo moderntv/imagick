@@ -67,4 +67,4 @@ jobs:
         shell: msys2 {0}
         run: >
           MAGICK_CONFIGURE_PATH=/d/a/_temp/msys/msys64/mingw64/etc/ImageMagick-7 
-          /c/hostedtoolcache/windows/go/1.20.6/x64/bin/go.exe test -v ./imagick 
+          /c/hostedtoolcache/windows/go/1.23.0/x64/bin/go.exe test -v ./imagick 
