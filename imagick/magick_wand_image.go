@@ -801,7 +801,8 @@ func (mw *MagickWand) EvaluateImageChannel(channel ChannelType, op EvaluateOpera
 //	}
 //	floatPixels := val.([]float32)
 func (mw *MagickWand) ExportImagePixels(x, y int, cols, rows uint,
-	pmap string, stype StorageType) (interface{}, error) {
+	pmap string, stype StorageType,
+) (interface{}, error) {
 	if len(pmap) == 0 {
 		return nil, errors.New("zero-length pmap not permitted")
 	}
@@ -1094,8 +1095,10 @@ func (mw *MagickWand) GetImageBlob() ([]byte, error) {
 	clen := C.size_t(0)
 	csblob := C.MagickGetImageBlob(mw.mw, &clen)
 	defer relinquishMemory(unsafe.Pointer(csblob))
-	if err := mw.GetLastError(); err != nil {
-		return nil, err
+	if csblob == nil {
+		if err := mw.GetLastError(); err != nil {
+			return nil, err
+		}
 	}
 	ret := C.GoBytes(unsafe.Pointer(csblob), C.int(clen))
 	runtime.KeepAlive(mw)
@@ -1112,8 +1115,10 @@ func (mw *MagickWand) GetImagesBlob() ([]byte, error) {
 	clen := C.size_t(0)
 	csblob := C.MagickGetImagesBlob(mw.mw, &clen)
 	defer relinquishMemory(unsafe.Pointer(csblob))
-	if err := mw.GetLastError(); err != nil {
-		return nil, err
+	if csblob == nil {
+		if err := mw.GetLastError(); err != nil {
+			return nil, err
+		}
 	}
 	ret := C.GoBytes(unsafe.Pointer(csblob), C.int(clen))
 	runtime.KeepAlive(mw)
@@ -1693,8 +1698,8 @@ func pixelInterfaceToPtr(pixels interface{}) (unsafe.Pointer, StorageType, error
 // and type. You must pre-allocate this slice where the expected length varies
 // depending on the values of width, height, map, and type.
 func (mw *MagickWand) ImportImagePixels(x, y int, cols, rows uint, pmap string,
-	stype StorageType, pixels interface{}) error {
-
+	stype StorageType, pixels interface{},
+) error {
 	if err := checkColsRows(cols, rows); err != nil {
 		return err
 	}
